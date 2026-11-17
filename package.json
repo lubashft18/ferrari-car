@@ -1,0 +1,15 @@
+{
+  "name": "omnidrive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A cinematic, interactive 3D driving experience.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "lan": "node scripts/serve.mjs --lan",
+    "check": "node --check app.js && node --check driving-game.js && node --check game-controller.js && node --check scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "assets": "node scripts/fetch-assets.mjs"
+  }
+}

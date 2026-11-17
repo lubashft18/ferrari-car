@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101412">
+  <meta name="description" content="Take the wheel. Play a 3D coastal driving game with traffic, steering, acceleration and boost, or relax in a cinematic driving experience.">
+  <title>OmniDrive — Motion, perfected.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23101412'/%3E%3Cpath d='M9 27 18 11h6l-9 16m7 0 9-16' stroke='%23d7edb5' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="m11 5-6 4H2v6h3l6 4V5Z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-muted" viewBox="0 0 24 24"><path d="m11 5-6 4H2v6h3l6 4V5Zm5 4 5 6m0-6-5 6"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="3"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(-35 12 12)"/><path d="m16 2 3 1-1 3"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z"/><circle cx="12" cy="10" r="2"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A9 9 0 0 1 9.5 3.5a9 9 0 1 0 11 11Z"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 1 7M3 4v6h6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/></symbol>
+  </svg>
+
+  <main class="experience" id="experience">
+    <div class="viewport" id="viewport" role="img" aria-label="Interactive 3D sports car driving along a coastal road. Drag to rotate the camera, or use the camera buttons."></div>
+    <div class="scene-shade" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="header">
+      <a href="./" class="brand" aria-label="OmniDrive home"><svg viewBox="0 0 36 30" class="brand-mark" aria-hidden="true"><path d="m2 25 12-20h7L9 25Zm16 0L30 5h6L24 25Z" fill="currentColor"/></svg><span>omni<span class="brand-light">drive</span><span class="brand-period">.</span></span></a>
+      <nav class="mode-switch" aria-label="Experience mode">
+        <button class="mode-button active" data-mode="drive" aria-pressed="true">The drive</button>
+        <button class="mode-button game-nav" data-mode="game" aria-pressed="false">Play game <span class="tiny-arrow">↗</span></button>
+        <button class="mode-button" data-mode="studio" aria-pressed="false">The studio <span class="tiny-arrow">↗</span></button>
+      </nav>
+      <div class="header-tools">
+        <span class="live-label"><span class="live-dot"></span> LIVE EXPERIENCE</span>
+        <button class="icon-button" id="sound-button" aria-label="Enable engine sound" aria-pressed="false" title="Engine sound"><svg><use href="#i-muted"/></svg></button>
+        <button class="icon-button fullscreen-button" id="fullscreen-button" aria-label="Enter fullscreen" title="Fullscreen"><svg><use href="#i-expand"/></svg></button>
+      </div>
+    </header>
+
+    <section class="hero-copy" aria-labelledby="headline">
+      <div class="eyebrow"><span class="eyebrow-line"></span> AN EXPLORATION IN MOTION</div>
+      <h1 id="headline">Motion.<br><span>Perfected.</span></h1>
+      <p>Less destination.<br>More of the drive.</p>
+      <button class="take-wheel" id="take-wheel">Take the wheel <svg><use href="#i-arrow"/></svg></button>
+    </section>
+
+    <aside class="route-info" aria-label="Current environment">
+      <div class="route-label"><svg><use href="#i-pin"/></svg> THE COASTAL RUN</div>
+      <div class="route-line"></div>
+      <div class="route-meta"><span id="environment-caption">GOLDEN HOUR</span><span>ROUTE 01</span></div>
+      <svg class="route-drawing" viewBox="0 0 190 65" aria-hidden="true"><path class="route-ghost" d="M4 49C24 49 28 12 50 17s20 40 48 30 10-34 39-35 22 23 48 17"/><path class="route-path" d="M4 49C24 49 28 12 50 17s20 40 48 30 10-34 39-35 22 23 48 17"/><circle r="3.5" fill="#d7edb5"><animateMotion dur="8s" repeatCount="indefinite" path="M4 49C24 49 28 12 50 17s20 40 48 30 10-34 39-35 22 23 48 17"/></circle></svg>
+    </aside>
+
+    <div class="scene-tag"><span class="live-dot"></span><span id="scene-status">ON THE MOVE</span><span class="scene-tag-rule"></span><span>458 ITALIA</span></div>
+
+    <div class="camera-tools" aria-label="Camera controls">
+      <button class="icon-button" id="orbit-button" aria-label="Toggle orbit camera" aria-pressed="false" title="Orbit camera"><svg><use href="#i-orbit"/></svg></button>
+      <span class="tool-separator"></span>
+      <button class="icon-button" id="reset-button" aria-label="Reset experience" title="Reset experience"><svg><use href="#i-reset"/></svg></button>
+    </div>
+
+    <div class="interaction-hint" id="interaction-hint"><svg><use href="#i-orbit"/></svg> Drag to explore <span>·</span> Scroll to zoom</div>
+
+    <div class="finish-picker" aria-label="Vehicle paint finish">
+      <div class="micro-label">THE FINISH <span id="finish-name">Glacier silver</span></div>
+      <div class="swatches">
+        <button class="swatch active" style="--swatch:#c4ccd0" data-color="#aeb9be" data-name="Glacier silver" aria-label="Glacier silver paint" aria-pressed="true"></button>
+        <button class="swatch" style="--swatch:#a92f2f" data-color="#a51c26" data-name="Rosso red" aria-label="Rosso red paint" aria-pressed="false"></button>
+        <button class="swatch" style="--swatch:#8e9b7c" data-color="#63765c" data-name="Alpine green" aria-label="Alpine green paint" aria-pressed="false"></button>
+        <button class="swatch" style="--swatch:#e8dcc0" data-color="#d9c9a3" data-name="Champagne" aria-label="Champagne paint" aria-pressed="false"></button>
+        <button class="swatch" style="--swatch:#33383e" data-color="#161c24" data-name="Obsidian black" aria-label="Obsidian black paint" aria-pressed="false"></button>
+      </div>
+    </div>
+
+    <section class="drive-console" aria-label="Driving controls">
+      <div class="speed-section">
+        <div class="micro-label">CRUISING SPEED</div>
+        <div class="speed-number"><span id="speed-value">88</span><span class="speed-unit">km/h</span><span class="gear-badge" id="gear">D4</span></div>
+      </div>
+      <div class="speed-control">
+        <div class="speed-control-heading"><label for="speed-slider">Set your pace</label><span id="pace-label">A little freedom.</span></div>
+        <input id="speed-slider" type="range" min="0" max="200" step="1" value="88" aria-label="Driving speed" aria-valuetext="88 kilometers per hour">
+        <div class="range-labels"><span>0</span><span>100</span><span>200 <span class="unit-label">km/h</span></span></div>
+      </div>
+      <div class="console-divider"></div>
+      <div class="view-section"><div class="micro-label">YOUR PERSPECTIVE</div><div class="view-buttons" aria-label="Camera perspective"><button class="view-button active" data-view="cinematic" aria-pressed="true">Cinematic</button><button class="view-button" data-view="side" aria-pressed="false">Side</button><button class="view-button" data-view="chase" aria-pressed="false">Chase</button></div></div>
+      <div class="console-divider environment-divider"></div>
+      <div class="environment-section"><div class="micro-label">THE ATMOSPHERE</div><button class="environment-button" id="environment-button" aria-label="Change atmosphere, currently Golden hour"><svg><use href="#i-sun"/></svg><span id="environment-name">Golden hour</span><span class="environment-chevron">⌄</span></button></div>
+      <button class="play-button" id="play-button" aria-label="Pause driving" aria-pressed="false"><svg><use href="#i-pause"/></svg></button>
+    </section>
+
+    <footer class="footer"><span>A LITTLE ESCAPE. <span class="footer-muted">BUILT FOR THE DRIVE.</span></span><div class="trip"><span class="trip-dot"></span><span id="trip-distance">0.00</span> KM EXPLORED</div><button id="credits-button" class="credits-button" aria-label="About this experience and asset credits">ABOUT THE EXPERIENCE <svg><use href="#i-arrow"/></svg></button></footer>
+
+    <section class="game-hud" id="game-hud" aria-label="Coastal sprint game" hidden>
+      <div class="game-topline">
+        <div class="game-route"><span class="live-dot"></span> COASTAL SPRINT <span class="game-route-number">/ 01</span></div>
+        <div class="game-actions">
+          <button id="game-camera" title="Change camera (C)">Camera <kbd>C</kbd></button>
+          <button id="game-pause" aria-label="Pause game">Pause <kbd>Esc</kbd></button>
+          <button id="game-exit">Exit <svg><use href="#i-close"/></svg></button>
+        </div>
+      </div>
+      <div class="race-progress"><div class="race-progress-heading"><span><strong id="game-distance">0</strong> <span class="hud-muted">/ 2,000 m</span></span><span id="game-time">00:00</span><span class="game-score"><span class="hud-muted">SCORE</span> <strong id="game-score">0</strong></span></div><div class="race-track" role="progressbar" id="race-progress" aria-label="Sprint progress" aria-valuemin="0" aria-valuemax="2000" aria-valuenow="0"><div id="race-progress-fill"></div></div></div>
+      <div class="game-callout" id="game-callout" aria-live="polite"></div>
+      <div class="game-dashboard">
+        <div class="game-speed"><span id="game-speed">0</span><div><span class="game-gear" id="game-gear">N</span><span class="hud-muted">KM/H</span></div></div>
+        <div class="car-condition"><span>CAR CONDITION</span><span id="game-health-label">100%</span></div>
+        <div class="condition-track" id="game-health" role="progressbar" aria-label="Car condition" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div id="game-health-fill"></div></div>
+        <div class="boost-heading"><span>BOOST</span><span id="game-boost-label">READY <kbd>SHIFT</kbd></span></div>
+        <div class="boost-track" id="game-boost" role="progressbar" aria-label="Boost energy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div id="game-boost-fill"></div></div>
+      </div>
+      <div class="game-keyboard-help"><span><kbd>W</kbd> <kbd>↑</kbd> Accelerate</span><span><kbd>S</kbd> <kbd>↓</kbd> Brake</span><span><kbd>A</kbd> <kbd>D</kbd> Steer</span><span><kbd>Shift</kbd> Boost</span><span><kbd>R</kbd> Restart</span></div>
+      <div class="touch-controls" aria-label="Touch driving controls">
+        <div class="touch-steering"><button data-control="left" class="touch-steer" aria-label="Steer left" aria-pressed="false">←</button><button data-control="right" class="touch-steer" aria-label="Steer right" aria-pressed="false">→</button></div>
+        <div class="touch-pedals"><button data-control="boost" class="touch-boost" aria-label="Hold for boost" aria-pressed="false">BOOST</button><div><button data-control="brake" class="touch-brake" aria-label="Hold to brake" aria-pressed="false"><span>Ⅱ</span>BRAKE</button><button data-control="throttle" class="touch-throttle" aria-label="Hold to accelerate" aria-pressed="false"><span>↑</span>GAS</button></div></div>
+      </div>
+    </section>
+
+    <section class="game-overlay" id="game-overlay" aria-labelledby="game-title" hidden>
+      <div class="game-card">
+        <div class="eyebrow"><span class="eyebrow-line"></span><span id="game-card-eyebrow">COASTAL SPRINT · 2 KM</span></div>
+        <h2 id="game-title">Your road.<br><span>Your rules.</span></h2>
+        <p id="game-description">Take control of the 458. Weave through traffic, keep your car in one piece, and reach the finish.</p>
+        <div class="game-control-guide" id="game-control-guide"><div><span class="guide-keys"><kbd>W</kbd><kbd>↑</kbd></span><span>Accelerate</span></div><div><span class="guide-keys"><kbd>A</kbd><kbd>D</kbd></span><span>Steer</span></div><div><span class="guide-keys"><kbd>S</kbd><kbd>↓</kbd></span><span>Brake</span></div><div><span class="guide-keys"><kbd>Shift</kbd></span><span>Boost</span></div></div>
+        <p class="touch-guide">Use the on-screen steering, gas, brake, and boost buttons. Hold gas to accelerate.</p>
+        <div class="game-results" id="game-results" hidden><div><span>SCORE</span><strong id="result-score">0</strong></div><div><span>DISTANCE</span><strong id="result-distance">0 m</strong></div><div><span>OVERTAKES</span><strong id="result-overtakes">0</strong></div><div><span>TOP SPEED</span><strong id="result-speed">0 km/h</strong></div></div>
+        <div class="game-best"><span>PERSONAL BEST</span><span id="best-score">0</span></div>
+        <button class="start-game" id="start-game">Start engine <svg><use href="#i-arrow"/></svg></button>
+        <button class="back-to-drive" id="back-to-drive">Back to the experience</button>
+        <div class="game-tip" id="game-tip">Clean overtakes +75 · Near misses +200 · Reach the finish for a bonus</div>
+      </div>
+    </section>
+    <div class="game-countdown" id="game-countdown" role="status" aria-live="polite" hidden></div>
+    <div class="damage-flash" id="damage-flash" aria-hidden="true"></div>
+
+    <div class="loader" id="loader" role="status"><div class="loader-mark">o<span>.</span></div><div class="loader-title">A great drive takes a moment.</div><div class="loader-track"><div id="loader-progress"></div></div><span class="micro-label" id="loader-label">PREPARING YOUR EXPERIENCE</span></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <dialog id="about-dialog" class="about-dialog"><button class="icon-button dialog-close" id="close-about" aria-label="Close about dialog"><svg><use href="#i-close"/></svg></button><div class="eyebrow">THE DETAILS</div><h2>Made for<br><span>the moment.</span></h2><p>A real-time 3D driving study. Change the light, find your angle, and take the long way home.</p><div class="about-instructions"><span><kbd>Space</kbd> Play / pause</span><span><kbd>←</kbd> <kbd>→</kbd> Adjust speed</span><span><kbd>Drag</kbd> Rotate the camera</span><span><kbd>Scroll</kbd> Zoom in / out</span></div><div class="credit-detail">Ferrari 458 Italia model by <a href="https://sketchfab.com/models/57bf6cc56931426e87494f554df1dab6" target="_blank" rel="noopener noreferrer">vicent091036</a>, distributed with <a href="https://github.com/mrdoob/three.js/tree/r170" target="_blank" rel="noopener noreferrer">Three.js</a>. Environment by <a href="https://polyhaven.com/a/venice_sunset" target="_blank" rel="noopener noreferrer">Poly Haven</a> (CC0). An independent visual demo; unaffiliated with Ferrari.</div></dialog>
+  <noscript><div class="no-script">Please enable JavaScript to enjoy the 3D driving experience.</div></noscript>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
